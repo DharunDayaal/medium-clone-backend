@@ -15,7 +15,6 @@ const postSchema = mongoose.Schema({
     },
     slug: {
         type: String,
-        required: [true, 'Post slug is required'],
         unique: true
     },
     oldSlugs: [{ type: String }],
@@ -31,7 +30,7 @@ const postSchema = mongoose.Schema({
         default: 0,
     },
     commentsCount: {
-        type: String,
+        type: Number,
         default: 0
     },
     readTime: {

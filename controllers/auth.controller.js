@@ -33,7 +33,7 @@ export const signUp = async (req, res, next) => {
             }
         ], { session })
 
-        const token = jwt.sign({ userId: newUsers[0]._id }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN })
+        const token = jwt.sign({ userId: newUsers[0]._id }, JWT_SECRET, { expiresIn: "1d" })
 
         await session.commitTransaction()
         session.endSession()
@@ -74,7 +74,7 @@ export const signIn = async (req, res, next) => {
             throw error;
         }
 
-        const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN })
+        const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: "1d" })
 
         const expiresAt = new Date(Date.now() + parseJwtExpiry(JWT_EXPIRES_IN))
 
@@ -106,7 +106,7 @@ export const signOut = async (req, res, next) => {
 
         const result = await Session.deleteOne({ token })
 
-        if(result.deletedCount === 0) {
+        if (result.deletedCount === 0) {
             const error = new Error("Session not found or already logged out");
             error.statusCode = 400
             throw error

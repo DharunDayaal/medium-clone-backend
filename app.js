@@ -8,6 +8,8 @@ import postRouter from "./routes/post.routes.js"
 import tagRouter from "./routes/tag.routes.js"
 import followRouter from "./routes/follow.routes.js"
 
+await connectToDatabase()
+
 const app = express()
 
 app.use(express.json())
@@ -21,9 +23,4 @@ app.use("/api/v1/follow", followRouter)
 
 app.use(errorMiddleware)
 
-app.listen(PORT, async () => {
-    console.log(`Server is running on http://localhost:${PORT}`)
-    await connectToDatabase()
-})
-
-
+export default app

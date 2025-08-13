@@ -1,0 +1,245 @@
+import Like from "../models/like.model.js";
+import Post from "../models/post.model.js";
+import Tag from "../models/tag.model.js";
+
+export const createPost = async (req, res, next) => {
+    try {
+        const posts = await Post.create({
+            ...req.body,
+            aurthor: req.user._id
+        })
+
+        res.status(201).json({
+            success: true,
+            message: "Post created successfully",
+        })
+
+    } catch (error) {
+        next(error)
+    }
+}
+
+export const getAllPosts = async (req, res, next) => {
+    try {
+        const posts = await Post.find({}).select("-oldSlugs")
+        res.status(200).json({
+            success: true,
+            message: "success",
+            data: posts
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+
+export const publishPost = async (req, res, next) => {
+    try {
+        if (!req.params.id) {
+            const error = new Error("Post ID is required");
+            error.statusCode = 404;
+            throw error;
+        }
+        const post = await Post.findById(req.params.id);
+
+        if (post.status !== "draft") {
+            const error = new Error("Post already published");
+            error.statusCode = 429;
+            throw error;
+        }
+
+        if (!post) {
+            const error = new Error("Post not found");
+            error.statusCode = 404;
+            throw error;
+        }
+
+        const publishedPost = await Post.updateOne({ _id: req.params.id }, { $set: { status: "published" } })
+        res.status(200).json({
+            success: true,
+            message: "Post published successfully",
+        })
+
+    } catch (error) {
+        next(error)
+    }
+}
+
+export const getPostById = async (req, res, next) => {
+    try {
+        if (!req.params.id) {
+            const error = new Error("Post ID is required");
+            error.statusCode = 404;
+            throw error;
+        }
+
+        const post = await Post.findById(req.params.id).select("-oldSlugs")
+
+        if (!post) {
+            const error = new Error("Post not found");
+            error.statusCode = 404;
+            throw error;
+        }
+
+        res.status(200).json({
+            success: true,
+            message: "Post retrived successfully",
+            data: post
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+
+export const unpublishPost = async (req, res, next) => {
+    try {
+        if (!req.params.id) {
+            const error = new Error("Post ID is required");
+            error.statusCode = 404;
+            throw error;
+        }
+        const post = await Post.findById(req.params.id);
+
+        if (post.status !== "published") {
+            const error = new Error("Post not published");
+            error.statusCode = 429;
+            throw error;
+        }
+
+        if (!post) {
+            const error = new Error("Post not found");
+            error.statusCode = 404;
+            throw error;
+        }
+
+        const publishedPost = await Post.updateOne({ _id: req.params.id }, { $set: { status: "draft" } })
+        res.status(200).json({
+            success: true,
+            message: "Post changed to draft successfully",
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+
+export const deletePost = async (req, res, next) => {
+    try {
+        if (!req.params.id) {
+            const error = new Error("Post ID is required");
+            error.statusCode = 404;
+            throw error;
+        }
+
+        const deletedResult = await Post.deleteOne({ _id: req.params.id })
+
+        if (deletedResult.deletedCount === 0) {
+            const error = new Error("Post already deleted");
+            error.statusCode = 404;
+            throw error;
+        }
+
+        res.status(200).json({
+            success: true,
+            message: "Post deleted successfully"
+        })
+
+    } catch (error) {
+        next(error)
+    }
+}
+
+export const likePost = async (req, res, next) => {
+    try {
+        if (!req.params.id) {
+            const error = new Error("Post ID is required");
+            error.statusCode = 404;
+            throw error;
+        }
+
+        const post = await Post.findById(req.params.id);
+        if (!post) {
+            const error = new Error("Post not found");
+            error.statusCode = 404;
+            throw error;
+        }
+
+        const existingLike = await Like.findOne({ user: req.user.id, post: req.params.id });
+
+        // Like exists delete and decrement the like count
+        if (existingLike) {
+            await Like.deleteOne({ _id: existingLike._id })
+            post.likesCount = Math.max(0, post.likesCount - 1)
+
+            await post.save();
+
+            return res.status(200).json({
+                success: true,
+                message: "Post unliked successfully"
+            })
+        }
+
+        // Create new Like
+        await Like.create({ user: req.user.id, post: req.params.id })
+
+        post.likesCount += 1;
+        await post.save();
+
+        res.status(200).json({
+            success: true,
+            message: "Post liked successfully"
+        })
+
+    } catch (error) {
+        next(error)
+    }
+}
+
+export const getPostsByTag = async (req, res, next) => {
+    try {
+        if (!req.params.tagName) {
+            const error = new Error("Tag name is required");
+            error.statusCode = 404;
+            throw error;
+        }
+
+        const tag = await Tag.findOne({ name: req.params.tagName })
+        if (!tag) {
+            const error = new Error("Tag not found");
+            error.statusCode = 404;
+            throw error;
+        }
+
+        const posts = await Post.find({ tags: tag._id, status: "published" }).select("-oldSlugs").sort({ createdAt: -1 });
+
+        res.status(200).json({
+            success: true,
+            message: "Posts based on tags retrived successfully",
+            data: {
+                tag: tag.name,
+                post_length: posts.length,
+                posts
+            }
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+
+export const getMyPosts = async (req, res, next) => {
+    try {
+        if (req.user.id !== req.params.id) {
+            const error = new Error("You are unauthorized to access this posts");
+            error.statusCode = 401;
+            throw error;
+        }
+
+        const posts = await Post.find({ aurthor: req.params.id }).select("-oldSlugs");
+
+        res.status(200).json({
+            success: true,
+            message: "Posts by user retrived successfully",
+            data: posts,
+        })
+    } catch (error) {
+        next(error)
+    }
+}

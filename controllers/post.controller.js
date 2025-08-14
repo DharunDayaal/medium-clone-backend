@@ -243,3 +243,6 @@ export const getMyPosts = async (req, res, next) => {
         next(error)
     }
 }
+
+//update the post
+//create user controller for user side operations.

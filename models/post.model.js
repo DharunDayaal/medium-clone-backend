@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import Tag from "./tag.model.js";
 
 const postSchema = mongoose.Schema({
     aurthor: {
@@ -95,8 +96,25 @@ postSchema.pre("save", async function (next) {
     next();
 })
 
+// Increment postsCount when a new post is created
+postSchema.post("save", async function (doc) {
+    if (doc.tags && doc.tags.length > 0) {
+        await Tag.updateMany(
+            { _id: { $in: doc.tags } },
+            { $inc: { postsCount: 1 } }
+        );
+    }
+});
 
-
+// Decrement postsCount when a post is deleted
+postSchema.post("findOneAndDelete", async function (doc) {
+    if (doc && doc.tags && doc.tags.length > 0) {
+        await Tag.updateMany(
+            { _id: { $in: doc.tags } },
+            { $inc: { postsCount: -1 } }
+        );
+    }
+});
 
 const Post = mongoose.model('Post', postSchema)
 

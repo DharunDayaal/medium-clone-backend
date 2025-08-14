@@ -7,6 +7,7 @@ import authRouter from "./routes/auth.routes.js"
 import postRouter from "./routes/post.routes.js"
 import tagRouter from "./routes/tag.routes.js"
 import followRouter from "./routes/follow.routes.js"
+import commentRouter from "./routes/comments.routes.js"
 
 const app = express()
 
@@ -18,6 +19,7 @@ app.use("/api/v1/auth", authRouter)
 app.use("/api/v1/post", postRouter)
 app.use("/api/v1/tag", tagRouter)
 app.use("/api/v1/follow", followRouter)
+app.use("/api/v1/comment", commentRouter)
 
 app.use(errorMiddleware)
 

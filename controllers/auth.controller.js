@@ -76,7 +76,10 @@ export const signIn = async (req, res, next) => {
 
         const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: "1d" })
 
-        const expiresAt = new Date(Date.now() + parseJwtExpiry(JWT_EXPIRES_IN))
+        const decoded = jwt.decode(token)
+
+        // Convert exp (seconds) → Date for MongoDB TTL
+        const expiresAt = new Date(decoded.exp * 1000)
 
         await Session.create({ user: user._id, token, expiresAt })
 

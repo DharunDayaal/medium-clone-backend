@@ -8,7 +8,8 @@ import {
     getPostsByTag,
     likePost,
     publishPost,
-    unpublishPost
+    unpublishPost,
+    updatePost
 } from "../controllers/post.controller.js";
 import authorize from "../middleware/auth.middleware.js";
 
@@ -23,16 +24,8 @@ postRouter.delete("/delete/:id", authorize, deletePost);
 postRouter.post("/:id/like", authorize, likePost); // Same endpoint for like and unliking the post.
 postRouter.get("/tag/:tagName", authorize, getPostsByTag);
 postRouter.get("/user/:id", authorize, getMyPosts);
+postRouter.put("/update/:id", authorize, updatePost);
 
-// Update post details (title, content, tags, etc.)
-// postRouter.put("/update/:id", authorize, updatePost);
-
-
-// // Add a comment to a post
-// postRouter.post("/:id/comment", authorize, addComment);
-
-// // Get all comments for a post
-// postRouter.get("/:id/comments", authorize, getComments);
 
 // // Search posts
 // postRouter.get("/search", authorize, searchPosts);

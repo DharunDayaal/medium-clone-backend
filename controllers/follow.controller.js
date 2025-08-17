@@ -61,39 +61,3 @@ export const unfollowTheUser = async (req, res, next) => {
         next(error)
     }
 }
-
-export const getFollowing = async (req, res, next) => {
-    try {
-        const followers = await Follow.find({ following: req.params.id }).populate("follower", "name email profileImage")
-
-        res.status(200).json({
-            success: true,
-            message: "Following users rectified",
-            data: followers
-        })
-    } catch (error) {
-        next(error)
-    }
-}
-
-export const getFollowers = async (req, res, next) => {
-    try {
-        const followers = await Follow.find({ follower: req.params.id }).populate("following", "name email profileImage")
-
-        res.status(200).json({
-            success: true,
-            message: "Following users rectified",
-            data: followers
-        })
-    } catch (error) {
-        next(error)
-    }
-}
-
-export const rgwr = async (req, res, next) => {
-    try {
-
-    } catch (error) {
-        next(error)
-    }
-}

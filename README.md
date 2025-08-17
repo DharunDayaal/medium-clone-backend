@@ -92,6 +92,10 @@ It provides APIs for authentication, posts, tags, comments, likes, and follows.
 
 ---
 
+<img width="2642" height="3831" alt="Untitled diagram _ Mermaid Chart-2025-08-17-151954" src="https://github.com/user-attachments/assets/0dff5e74-9ad3-4fd3-bc6e-2ea15288fa5a" />
+
+---
+
 ## 📡 API Endpoints
 
 ### 🔑 Auth Routes

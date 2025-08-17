@@ -16,6 +16,8 @@ const sessionSchema = mongoose.Schema({
     },
 }, { timestamps: true })
 
+sessionSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 })
+
 const Session = mongoose.model('Session', sessionSchema)
 
 export default Session

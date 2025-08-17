@@ -9,9 +9,11 @@ import followRouter from "./routes/follow.routes.js"
 import postRouter from "./routes/post.routes.js"
 import tagRouter from "./routes/tag.routes.js"
 import userRouter from "./routes/user.routes.js"
+import corsConfig from "./middleware/cors.middleware.js"
 
 const app = express()
 
+app.use(corsConfig)
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())

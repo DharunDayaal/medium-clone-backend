@@ -244,5 +244,36 @@ export const getMyPosts = async (req, res, next) => {
     }
 }
 
-//update the post
-//create user controller for user side operations.
+
+export const updatePost = async (req, res, next) => {
+    try {
+        const { id } = req.params
+
+        const post = await Post.findById(id)
+        if (!post) {
+            const error = new Error("Post not found")
+            error.statusCode = 404
+            throw error
+        }
+
+        // push the old slug into OldSlugs array and empty post and save the post
+        if (req.body.title && req.body.title !== post.title) {
+            post.title = req.body.title;
+        }
+
+        Object.keys(req.body).forEach((key) => {
+            if (key !== "title" && key !== "slug") {
+                post[key] = req.body[key]
+            }
+        })
+
+        await post.save()
+
+        res.status(200).json({
+            success: true,
+            message: "Post updated successfully"
+        })
+    } catch (error) {
+        next(error)
+    }
+}

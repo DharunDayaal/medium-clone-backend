@@ -40,7 +40,7 @@ export const signUp = async (req, res, next) => {
 
         res.status(201).json({
             success: true,
-            message: "User created successfully",
+            message: "success",
             data: {
                 token: token,
                 user: newUsers[0]
@@ -82,7 +82,7 @@ export const signIn = async (req, res, next) => {
 
         res.status(200).json({
             success: true,
-            message: "User signed in successfully",
+            message: "success",
             data: {
                 user,
                 token

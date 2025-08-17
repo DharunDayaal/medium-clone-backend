@@ -14,7 +14,7 @@ export const getUserProfile = async (req, res, next) => {
 
         res.status(200).json({
             success: true,
-            message: "User profile retrived successfully",
+            message: "success",
             data: user
         })
 
@@ -49,7 +49,7 @@ export const updateUserProfile = async (req, res, next) => {
 
         res.status(200).json({
             success: true,
-            message: "Profile updated successfully",
+            message: "success",
             data: user
         })
 
@@ -64,7 +64,7 @@ export const getFollowingUsers = async (req, res, next) => {
 
         res.status(200).json({
             success: true,
-            message: "Following users rectified successfully",
+            message: "success",
             data: followers
         })
     } catch (error) {
@@ -78,7 +78,7 @@ export const getUserFollowers = async (req, res, next) => {
 
         res.status(200).json({
             success: true,
-            message: "Followers rectified successfully",
+            message: "success",
             data: followers
         })
     } catch (error) {

@@ -82,7 +82,7 @@ export const getPostById = async (req, res, next) => {
 
         res.status(200).json({
             success: true,
-            message: "Post retrived successfully",
+            message: "success",
             data: post
         })
     } catch (error) {
@@ -212,7 +212,7 @@ export const getPostsByTag = async (req, res, next) => {
 
         res.status(200).json({
             success: true,
-            message: "Posts based on tags retrived successfully",
+            message: "success",
             data: {
                 tag: tag.name,
                 post_length: posts.length,
@@ -236,7 +236,7 @@ export const getMyPosts = async (req, res, next) => {
 
         res.status(200).json({
             success: true,
-            message: "Posts by user retrived successfully",
+            message: "success",
             data: posts,
         })
     } catch (error) {

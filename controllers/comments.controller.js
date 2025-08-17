@@ -23,7 +23,7 @@ export const createComment = async (req, res, next) => {
 
         res.status(201).json({
             success: true,
-            message: "Comment added successfully"
+            message: "success"
         });
     } catch (error) {
         next(error);
@@ -60,7 +60,7 @@ export const createReplyComment = async (req, res, next) => {
 
         res.status(201).json({
             success: true,
-            message: "Reply added successfully"
+            message: "success"
         });
     } catch (error) {
         next(error);
@@ -92,7 +92,7 @@ export const getAllComments = async (req, res, next) => {
 
         res.status(200).json({
             success: true,
-            message: "Comments retrieved",
+            message: "success",
             data: topLevel
         });
     } catch (error) {
@@ -120,7 +120,7 @@ export const updateCommentAndReplyComment = async (req, res, next) => {
 
         res.status(200).json({
             success: true,
-            message: "Comment updated successfully",
+            message: "success",
             data: updatedComment
         })
     } catch (error) {

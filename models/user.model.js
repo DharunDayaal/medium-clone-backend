@@ -24,7 +24,10 @@ const userSchema = mongoose.Schema({
         trim: true,
         minLength: 8
     },
-
+    phoneNumber: {
+        type: String,
+        default: ""
+    },
     bio: {
         type: String,
         default: ""
@@ -32,12 +35,12 @@ const userSchema = mongoose.Schema({
     profileImage: {
         type: String,
         default: "",
-        socialLinks: {
-            website: String,
-            twitter: String,
-            github: String,
-            linkedin: String,
-        }
+    },
+    socialLinks: {
+        website: String,
+        twitter: String,
+        github: String,
+        linkedin: String,
     },
     followersCount: {
         type: Number,

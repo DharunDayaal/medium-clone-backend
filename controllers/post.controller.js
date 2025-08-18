@@ -9,6 +9,13 @@ export const createPost = async (req, res, next) => {
             aurthor: req.user._id
         })
 
+        if (posts.tags && posts.tags.length > 0) {
+            await Tag.updateMany(
+                { _id: { $in: posts.tags } },
+                { $inc: { postsCount: 1 } }
+            )
+        }
+
         res.status(201).json({
             success: true,
             message: "Post created successfully",
@@ -129,13 +136,24 @@ export const deletePost = async (req, res, next) => {
             throw error;
         }
 
-        const deletedResult = await Post.deleteOne({ _id: req.params.id })
+        const post = await Post.findById(req.params.id)
 
-        if (deletedResult.deletedCount === 0) {
+        if (!post) {
             const error = new Error("Post already deleted");
             error.statusCode = 404;
             throw error;
         }
+
+        if (post.tags && post.tags.length > 0) {
+            await Tag.updateMany(
+                { _id: { $in: post.tags } },
+                { $inc: { postsCount: -1 } },
+                { $max: { postsCount: 0 } }
+            )
+        }
+
+        await post.deleteOne({ _id: req.params.id })
+
 
         res.status(200).json({
             success: true,

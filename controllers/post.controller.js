@@ -28,7 +28,7 @@ export const createPost = async (req, res, next) => {
 
 export const getAllPosts = async (req, res, next) => {
     try {
-        const posts = await Post.find({}).select("-oldSlugs")
+        const posts = await Post.find({ status: "published" }).select("-oldSlugs").populate("aurthor", "name profileImage followersCount")
         res.status(200).json({
             success: true,
             message: "success",

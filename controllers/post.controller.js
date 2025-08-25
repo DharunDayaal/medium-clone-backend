@@ -73,13 +73,15 @@ export const publishPost = async (req, res, next) => {
 
 export const getPostById = async (req, res, next) => {
     try {
-        if (!req.params.id) {
+        if (!req.params.slugAndId) {
             const error = new Error("Post ID is required");
             error.statusCode = 404;
             throw error;
         }
 
-        const post = await Post.findById(req.params.id).select("-oldSlugs")
+        const id = req.params.slugAndId.split("-").pop();
+
+        const post = await Post.findById(id).select("-oldSlugs").populate("aurthor", "name profileImage followersCount").populate("tags", "name description")
 
         if (!post) {
             const error = new Error("Post not found");

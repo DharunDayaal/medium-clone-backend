@@ -18,7 +18,7 @@ const postRouter = Router();
 postRouter.get("/", authorize, getAllPosts);
 postRouter.post("/create", authorize, createPost);
 postRouter.put("/publish/:id", authorize, publishPost);
-postRouter.get("/:id", authorize, getPostById);
+postRouter.get("/:slugAndId", authorize, getPostById);
 postRouter.put("/unpublish/:id", authorize, unpublishPost);
 postRouter.delete("/delete/:id", authorize, deletePost);
 postRouter.post("/:id/like", authorize, likePost); // Same endpoint for like and unliking the post.

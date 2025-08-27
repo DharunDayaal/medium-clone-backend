@@ -124,3 +124,37 @@ export const signOut = async (req, res, next) => {
         next(error)
     }
 };
+
+export const verifyToken = async (req, res, next) => {
+    try {
+        const token = req.headers.authorization?.split(" ")[1];
+
+        if(!token) {
+            return res.status(401).json({
+                success: false,
+                message: "Token missing"
+            })
+        }
+
+        jwt.verify(token, JWT_SECRET, (err, decode) => {
+            if(err) {
+                if(err.name === 'TokenExpiredError') {
+                    return res.status(401).json({
+                        success: false,
+                        message: "Token expired"
+                    })
+                }
+                return res.status(401).json({
+                    success: false,
+                    message: "Invalid token"
+                })
+            }
+            return res.status(200).json({
+                success: true,
+                decode
+            })
+        })
+    } catch (error) {
+        next(error)
+    }
+}

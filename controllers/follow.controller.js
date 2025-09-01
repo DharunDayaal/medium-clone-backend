@@ -50,12 +50,29 @@ export const unfollowTheUser = async (req, res, next) => {
             throw error;
         }
 
-        await User.findByIdAndUpdate(req.params.id, { $dec: { followersCount: -1 } })
-        await User.findByIdAndUpdate(req.user.id, { $dec: { followingCount: -1 } })
+        await User.findByIdAndUpdate(req.params.id, { $inc: { followersCount: -1 } })
+        await User.findByIdAndUpdate(req.user.id, { $inc: { followingCount: -1 } })
 
         res.status(200).json({
             success: true,
             message: "Unfollowed successfully",
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+
+export const checkFollowing = async (req, res, next) => {
+    try {
+        const isFollowing = await Follow.exists({
+            follower: req.user.id,
+            following: req.params.id
+        })
+
+        res.status(200).json({
+            success: true,
+            message: "Successfull",
+            isFollowing: !!isFollowing
         })
     } catch (error) {
         next(error)

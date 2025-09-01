@@ -125,36 +125,47 @@ export const signOut = async (req, res, next) => {
     }
 };
 
-export const verifyToken = async (req, res, next) => {
-    try {
-        const token = req.headers.authorization?.split(" ")[1];
+// no need for veri
 
-        if(!token) {
-            return res.status(401).json({
-                success: false,
-                message: "Token missing"
-            })
-        }
+// export const verifyToken = async (req, res, next) => {
+//     try {
+//         const token = req.headers.authorization?.split(" ")[1];
 
-        jwt.verify(token, JWT_SECRET, (err, decode) => {
-            if(err) {
-                if(err.name === 'TokenExpiredError') {
-                    return res.status(401).json({
-                        success: false,
-                        message: "Token expired"
-                    })
-                }
-                return res.status(401).json({
-                    success: false,
-                    message: "Invalid token"
-                })
-            }
-            return res.status(200).json({
-                success: true,
-                decode
-            })
-        })
-    } catch (error) {
-        next(error)
-    }
-}
+//         if(!token) {
+//             return res.status(401).json({
+//                 success: false,
+//                 message: "Token missing"
+//             })
+//         }
+
+//         const resToken = await Session.findOne({ token })
+
+//         if(!resToken) {
+//             return res.status(401).json({
+//                 success: false,
+//                 message: "Token not found"
+//             })
+//         }
+
+//         jwt.verify(token, JWT_SECRET, (err, decode) => {
+//             if(err) {
+//                 if(err.name === 'TokenExpiredError') {
+//                     return res.status(401).json({
+//                         success: false,
+//                         message: "Token expired"
+//                     })
+//                 }
+//                 return res.status(401).json({
+//                     success: false,
+//                     message: "Invalid token"
+//                 })
+//             }
+//             return res.status(200).json({
+//                 success: true,
+//                 decode
+//             })
+//         })
+//     } catch (error) {
+//         next(error)
+//     }
+// }

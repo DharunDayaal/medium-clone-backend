@@ -6,6 +6,6 @@ const followRouter = Router();
 
 followRouter.post("/:id", authorize, createFollow) // User_b id
 followRouter.delete("/:id", authorize, unfollowTheUser) // User_b id
-followRouter.get("/:id/check", authorize, checkFollowing)
+// followRouter.get("/:id/check", authorize, checkFollowing)
 
 export default followRouter;

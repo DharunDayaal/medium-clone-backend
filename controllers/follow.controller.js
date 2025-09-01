@@ -62,9 +62,6 @@ export const unfollowTheUser = async (req, res, next) => {
     }
 }
 
-// controllers/follow.controller.js
-import Follow from "../models/follow.models.js";
-
 export const checkFollowing = async (req, res) => {
   try {
     const followerId = req.user.id;   // from authorize middleware

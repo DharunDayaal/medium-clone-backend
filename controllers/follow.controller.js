@@ -62,19 +62,33 @@ export const unfollowTheUser = async (req, res, next) => {
     }
 }
 
-export const checkFollowing = async (req, res, next) => {
-    try {
-        const isFollowing = await Follow.exists({
-            follower: req.user.id,
-            following: req.params.id
-        })
+export const checkFollowing = async (req, res) => {
+  try {
+    const followerId = req.user.id;   // from authorize middleware
+    const followingId = req.params.id; // from route param
 
-        res.status(200).json({
-            success: true,
-            message: "Successfull",
-            isFollowing: !!isFollowing
-        })
-    } catch (error) {
-        next(error)
+    if (!followerId || !followingId) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid user IDs",
+      });
     }
-}
+
+    const isFollowing = await Follow.exists({
+      follower: followerId,
+      following: followingId,
+    });
+
+    return res.status(200).json({
+      success: true,
+      isFollowing: !!isFollowing,
+    });
+  } catch (error) {
+    console.error("Error in checkFollowing:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+      error: error.message,
+    });
+  }
+};

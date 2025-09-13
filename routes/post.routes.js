@@ -17,6 +17,7 @@ import authorize from "../middleware/auth.middleware.js";
 const postRouter = Router();
 
 postRouter.get("/", authorize, getAllPosts);
+postRouter.get("/drafts", authorize, getDraftPosts);
 postRouter.post("/create", authorize, createPost);
 postRouter.put("/publish/:id", authorize, publishPost);
 postRouter.get("/:slugAndId", authorize, getPostById);
@@ -26,7 +27,6 @@ postRouter.post("/:id/like", authorize, likePost); // Same endpoint for like and
 postRouter.get("/tag/:tagName", authorize, getPostsByTag);
 postRouter.get("/user/:id", authorize, getMyPosts);
 postRouter.put("/update/:id", authorize, updatePost);
-postRouter.get("/drafts", authorize, getDraftPosts);
 
 
 // // Search posts

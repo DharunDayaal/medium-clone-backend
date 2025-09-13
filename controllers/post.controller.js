@@ -264,6 +264,26 @@ export const getMyPosts = async (req, res, next) => {
     }
 }
 
+export const getDraftPosts = async (req, res, next) => {
+    try {
+        const posts = await Post.find({ status: "draft" }).populate("aurthor", "name profileImage followersCount").populate("tags", "name description")
+
+        if(!posts) {
+            res.status(204).json({
+                success: true,
+                message: "No Post found"
+            })
+        }
+
+        res.status(200).json({
+            success: true,
+            message: "Post retrived successfully",
+            data: posts
+        })
+    } catch (error) {
+        next(error)
+    }
+}
 
 export const updatePost = async (req, res, next) => {
     try {

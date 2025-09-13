@@ -3,6 +3,7 @@ import {
     createPost,
     deletePost,
     getAllPosts,
+    getDraftPosts,
     getMyPosts,
     getPostById,
     getPostsByTag,
@@ -25,6 +26,7 @@ postRouter.post("/:id/like", authorize, likePost); // Same endpoint for like and
 postRouter.get("/tag/:tagName", authorize, getPostsByTag);
 postRouter.get("/user/:id", authorize, getMyPosts);
 postRouter.put("/update/:id", authorize, updatePost);
+postRouter.get("/drafts", authorize, getDraftPosts);
 
 
 // // Search posts

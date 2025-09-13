@@ -70,7 +70,7 @@ export const createReplyComment = async (req, res, next) => {
 export const getAllComments = async (req, res, next) => {
     try {
         const { postId } = req.params;
-        const comments = await Comment.find({ post: postId }).lean();
+        const comments = await Comment.find({ post: postId }).populate("aurthor", "name profileImage").lean();
 
         // Map comments by their ID
         const commentMap = {};

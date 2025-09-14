@@ -252,7 +252,7 @@ export const getMyPosts = async (req, res, next) => {
             throw error;
         }
 
-        const posts = await Post.find({ aurthor: req.params.id }).select("-oldSlugs").populate("aurthor", "name profileImage followersCount").populate("tags", "name description").sort({ createdAt: -1 });
+        const posts = await Post.find({ aurthor: req.params.id, status: "published" }).select("-oldSlugs").populate("aurthor", "name profileImage followersCount").populate("tags", "name description").sort({ createdAt: -1 });
 
         res.status(200).json({
             success: true,
